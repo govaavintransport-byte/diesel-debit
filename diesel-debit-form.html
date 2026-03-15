@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIESEL DEBIT FOR AAVIN FUEL STATION</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#eef4fb;
+margin:0;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+padding:20px;
+}
+
+h2{
+text-align:center;
+background:#003366;
+color:white;
+padding:10px;
+border-radius:6px;
+}
+
+label{
+font-weight:bold;
+margin-top:8px;
+display:block;
+}
+
+input{
+width:100%;
+padding:8px;
+margin-top:4px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:12px;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+.save{
+background:#28a745;
+color:white;
+}
+
+.view{
+background:#007bff;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>DIESEL DEBIT FOR AAVIN FUEL STATION</h2>
+
+<label>SL.NO</label>
+<input type="number" id="slno" readonly>
+
+<label>Name of the Unit / Union</label>
+<input type="text" id="unit">
+
+<label>Date</label>
+<input type="date" id="date">
+
+<label>Coupan No</label>
+<input type="text" id="coupan">
+
+<label>Receipt No</label>
+<input type="text" id="receipt">
+
+<label>Vehicle No</label>
+<input type="text" id="vehicle">
+
+<label>HSD Qty (Lts)</label>
+<input type="number" id="hsdqty">
+
+<label>Petrol Qty (Lts)</label>
+<input type="number" id="petrolqty">
+
+<label>2T Oil Qty (ML)</label>
+<input type="number" id="oilqty">
+
+<label>Unit Rate (Rs)</label>
+<input type="number" id="rate">
+
+<label>2T Oil Unit Rate (Rs)</label>
+<input type="number" id="oilrate">
+
+<label>HSD Amount (Rs)</label>
+<input type="number" id="hsdamt" readonly>
+
+<label>Petrol Amount (Rs)</label>
+<input type="number" id="petrolamt" readonly>
+
+<label>2T Oil Amount (Rs)</label>
+<input type="number" id="oilamt" readonly>
+
+
+<button class="save" onclick="saveData()">Save</button>
+
+<button class="view" onclick="window.location='diesel-data.html'">View Data</button>
+
+</div>
+
+<script>
+
+let data = JSON.parse(localStorage.getItem("dieselData")) || [];
+
+document.getElementById("slno").value = data.length + 1;
+
+function calculate(){
+
+let hsdqty = document.getElementById("hsdqty").value || 0;
+let petrolqty = document.getElementById("petrolqty").value || 0;
+let oilqty = document.getElementById("oilqty").value || 0;
+
+let rate = document.getElementById("rate").value || 0;
+let oilrate = document.getElementById("oilrate").value || 0;
+
+document.getElementById("hsdamt").value = hsdqty * rate;
+document.getElementById("petrolamt").value = petrolqty * rate;
+document.getElementById("oilamt").value = oilqty * oilrate;
+
+}
+
+document.querySelectorAll("input").forEach(i=>{
+i.addEventListener("input",calculate)
+})
+
+function saveData(){
+
+let entry={
+
+slno:document.getElementById("slno").value,
+unit:unit.value,
+date:date.value,
+coupan:coupan.value,
+receipt:receipt.value,
+vehicle:vehicle.value,
+hsdqty:hsdqty.value,
+petrolqty:petrolqty.value,
+oilqty:oilqty.value,
+rate:rate.value,
+oilrate:oilrate.value,
+hsdamt:hsdamt.value,
+petrolamt:petrolamt.value,
+oilamt:oilamt.value
+
+}
+
+data.push(entry)
+
+localStorage.setItem("dieselData",JSON.stringify(data))
+
+alert("Data Saved Successfully")
+
+location.reload()
+
+}
+
+</script>
+
+</body>
+</html>
