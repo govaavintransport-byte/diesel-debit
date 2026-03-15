@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Diesel Data Storage</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6fb;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+h2{
+text-align:center;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:6px;
+font-size:13px;
+}
+
+th{
+background:#003366;
+color:white;
+}
+
+button{
+padding:6px 10px;
+margin:3px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Diesel Debit Data</h2>
+
+<button onclick="downloadCSV()">Download CSV</button>
+<button onclick="window.location='diesel-debit-form.html'">Back</button>
+
+<table id="table">
+
+<thead>
+
+<tr>
+
+<th>SL</th>
+<th>Unit</th>
+<th>Date</th>
+<th>Coupan</th>
+<th>Receipt</th>
+<th>Vehicle</th>
+<th>HSD Qty</th>
+<th>Petrol Qty</th>
+<th>Oil Qty</th>
+<th>HSD Amt</th>
+<th>Petrol Amt</th>
+<th>Oil Amt</th>
+<th>Edit</th>
+<th>Delete</th>
+
+</tr>
+
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let data = JSON.parse(localStorage.getItem("dieselData")) || [];
+
+let tbody = document.querySelector("tbody");
+
+function loadData(){
+
+tbody.innerHTML="";
+
+data.forEach((d,i)=>{
+
+let row = `<tr>
+
+<td>${d.slno}</td>
+<td>${d.unit}</td>
+<td>${d.date}</td>
+<td>${d.coupan}</td>
+<td>${d.receipt}</td>
+<td>${d.vehicle}</td>
+<td>${d.hsdqty}</td>
+<td>${d.petrolqty}</td>
+<td>${d.oilqty}</td>
+<td>${d.hsdamt}</td>
+<td>${d.petrolamt}</td>
+<td>${d.oilamt}</td>
+
+<td><button onclick="editData(${i})">Edit</button></td>
+<td><button onclick="deleteData(${i})">Delete</button></td>
+
+</tr>`;
+
+tbody.innerHTML += row;
+
+})
+
+}
+
+loadData()
+
+function deleteData(i){
+
+data.splice(i,1)
+
+localStorage.setItem("dieselData",JSON.stringify(data))
+
+loadData()
+
+}
+
+function editData(i){
+
+alert("Edit option can be added easily if needed")
+
+}
+
+function downloadCSV(){
+
+let csv = "SL,Unit,Date,Coupan,Receipt,Vehicle,HSD Qty,Petrol Qty,Oil Qty,HSD Amt,Petrol Amt,Oil Amt\n"
+
+data.forEach(d=>{
+
+csv += `${d.slno},${d.unit},${d.date},${d.coupan},${d.receipt},${d.vehicle},${d.hsdqty},${d.petrolqty},${d.oilqty},${d.hsdamt},${d.petrolamt},${d.oilamt}\n`
+
+})
+
+let blob = new Blob([csv])
+
+let a=document.createElement("a")
+
+a.href=URL.createObjectURL(blob)
+
+a.download="diesel-data.csv"
+
+a.click()
+
+}
+
+</script>
+
+</body>
+</html>
